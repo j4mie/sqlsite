@@ -6,13 +6,13 @@ A tool for serving simple websites and JSON APIs directly from a [SQLite](https:
 
 SQLite is a fantastic way of storing data in a safe, well-structured, uniform way and querying it quickly. This project helps you expose that data to the web.
 
-SQLSite is inspired by [Datasette](https://datasette.readthedocs.io), but is much simpler. Unlike Datasette, SQLSite does not do anything automatically. It doesn't allow to you explore and visualize your data in nicely formatted tables and graphs. Instead, you must manually define how your data is exposed to the Web using SQL.
+SQLSite is inspired by [Datasette](https://datasette.readthedocs.io), but is much simpler. Unlike Datasette, SQLSite does not do anything automatically. It doesn't allow to you explore and visualize your data in nicely formatted tables and graphs. Instead, you must manually define how your data is exposed to the Web using SQL queries.
 
 ## Use Cases
 
 * Building simple websites (SQLSite would work well where you might normally use a static site generator but prefer your data to be structured and queryable).
 * Creating very quick and simple JSON APIs to expose data in a SQLite database to the web.
-* Serving static files directly from a [SQLite Archive](https://sqlite.org/sqlar.html).
+* Serving static files directly from a [SQLite Archive](#sqlite-archives).
 
 ## Prerequisite concepts
 
@@ -89,7 +89,6 @@ Your Jinja template will be rendered with a special function included in its con
     </ul>
   </body>
 </html>
-{% endblock %}
 ```
 
 Queries run using the `sql` function can contain [named parameters](https://sqlite.org/lang_expr.html#varparam). The optional second argument to `sql` is a dictionary of parameter values. The context for your template contains a variable called `url`, which is a dictionary containing all values captured from the URL pattern.
@@ -149,4 +148,23 @@ This should return:
 ```
 static/cat.gif
 templates/index.html
+```
+
+## Installing SQLSite
+
+You can install SQLSite with `pip install sqlsite`. It requires Python 3.7+.
+
+## Configuration
+
+The only configuration option available is the name of the SQLite database file to use. By default, SQLSite uses a database called `db.sqlite`. To change this, set the environment variable `SQLSITE_DATABASE` to the name of your database file.
+
+## Running and deploying SQLSite
+
+SQLSite is implemented as a [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface) application. WSGI is a Python standard for interfacing between a web application and a web server. SQLSite itself does not come with a web server, so you will have to install your own.
+
+[Gunicorn](https://gunicorn.org) is a widely used Python web application server. Read its [documentation](http://docs.gunicorn.org/en/stable/) carefully. An example command for local development might be:
+
+```
+pip install gunicorn
+gunicorn --bind 0.0.0.0:8000 sqlsite:app
 ```
