@@ -30,7 +30,7 @@ Here's the schema for the `route` table. To use a SQLite database with SQLSite, 
 
 ```sql
 CREATE TABLE route (
-    pattern TEXT PRIMARY KEY,
+    pattern TEXT PRIMARY KEY NOT NULL,
     handler TEXT NOT NULL,
     config TEXT NOT NULL,
     exists_query TEXT
