@@ -1,7 +1,9 @@
 import apsw
+import os
 
 
-def connect(name):
+def connect(name=None):
+    name = name or os.environ.get("SQLSITE_DATABASE", "db.sqlite")
     db = apsw.Connection(name)
     install_row_factory(db)
     return db

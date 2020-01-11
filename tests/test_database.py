@@ -31,3 +31,16 @@ def test_row_factory_installed():
     assert result[1] == "b"
     assert result["col1"] == "a"
     assert result["col2"] == "b"
+
+
+def test_database_name_default(mocker):
+    mock_connection = mocker.patch("apsw.Connection")
+    connect()
+    assert mock_connection.called_with("db.sqlite")
+
+
+def test_database_name_env_var(mocker):
+    mocker.patch.dict("os.environ", {"SQLSITE_DATABASE": "somedb.sqlite"})
+    mock_connection = mocker.patch("apsw.Connection")
+    connect()
+    assert mock_connection.called_with("somedb.sqlite")

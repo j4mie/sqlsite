@@ -30,7 +30,7 @@ def get_response(request):
 
 def make_app(test_db=None):
     def app(environ, start_response):
-        db = test_db or connect("db.sqlite")
+        db = test_db or connect()
         request = Request(environ, db)
         try:
             response = get_response(request)
