@@ -48,3 +48,19 @@ class PermanentRedirectResponse(Response):
 class JSONResponse(Response):
     def __init__(self, data):
         super().__init__(content=json.dumps(data), content_type="application/json")
+
+
+class StreamingResponse(Response):
+    def __init__(self, headers, content_iterable, content_type, content_length=None):
+        self.status = HTTPStatus.OK
+        self.headers = headers
+        self.content_iterable = content_iterable
+        self.content_type = content_type
+        self.content_length = content_length
+
+    def get_content(self):
+        return self.content_iterable
+
+    def get_content_length_header(self):
+        if self.content_length:
+            return ("Content-Length", str(self.content_length))

@@ -22,3 +22,23 @@ def create_route(db, pattern, handler, config="", exists_query=None):
         "exists_query": exists_query,
     }
     db.cursor().execute(sql, params)
+
+
+def ensure_sqlar_table(db):
+    sql = """
+    CREATE TABLE IF NOT EXISTS sqlar(
+        name TEXT PRIMARY KEY,  -- name of the file
+        mode INT,               -- access permissions
+        mtime INT,              -- last modification time
+        sz INT,                 -- original file size
+        data BLOB               -- compressed content
+        );
+    """
+    db.cursor().execute(sql)
+
+
+def create_sqlar_file(db, name, data):
+    ensure_sqlar_table(db)
+    sql = "INSERT INTO sqlar VALUES (:name, 33188, time('now'), :sz, :data)"
+    params = {"name": name, "data": data, "sz": len(data)}
+    db.cursor().execute(sql, params)
