@@ -1,4 +1,4 @@
-import zlib
+from zlib import decompress
 
 
 def get_row(db, name):
@@ -14,4 +14,4 @@ def get_data(db, row):
     blob = get_blob(db, row)
     length = blob.length()
     data = blob.read()
-    return zlib.decompress(data) if row["sz"] != length else data
+    return decompress(data) if row["sz"] != length else data

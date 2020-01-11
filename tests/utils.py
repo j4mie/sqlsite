@@ -1,4 +1,5 @@
 from sqlsite.database import connect, install_row_factory
+from zlib import compress
 
 
 def create_route_table(db):
@@ -40,5 +41,5 @@ def ensure_sqlar_table(db):
 def create_sqlar_file(db, name, data):
     ensure_sqlar_table(db)
     sql = "INSERT INTO sqlar VALUES (:name, 33188, time('now'), :sz, :data)"
-    params = {"name": name, "data": data, "sz": len(data)}
+    params = {"name": name, "data": compress(data), "sz": len(data)}
     db.cursor().execute(sql, params)
