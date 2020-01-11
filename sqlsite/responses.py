@@ -29,3 +29,8 @@ class Response:
 
     def get_content_type_header(self):
         return ("Content-Type", self.content_type)
+
+
+class NotFoundResponse(Response):
+    def __init__(self):
+        super().__init__(status=HTTPStatus.NOT_FOUND, content="Not Found")
