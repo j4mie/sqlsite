@@ -1,5 +1,7 @@
 from http import HTTPStatus
 
+import json
+
 
 class Response:
     def __init__(
@@ -41,3 +43,8 @@ class PermanentRedirectResponse(Response):
         super().__init__(
             status=HTTPStatus.MOVED_PERMANENTLY, headers=[("Location", redirect_to)]
         )
+
+
+class JSONResponse(Response):
+    def __init__(self, data):
+        super().__init__(content=json.dumps(data), content_type="application/json")
