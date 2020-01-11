@@ -1,5 +1,4 @@
 import apsw
-import re
 
 
 def connect(name):
@@ -23,19 +22,5 @@ def install_row_factory(db):
     db.setrowtrace(row_factory)
 
 
-def create_path_match_function(path):
-    def path_match(val):
-        if val.endswith("/$"):
-            val = val[:-2] + "/?$"
-        return re.search(val, path) is not None
-
-    return path_match
-
-
-def install_path_match_function(db, path):
-    """
-    Install a custom function to match path patterns in the database
-    to the path of the incoming request
-    """
-    path_match_function = create_path_match_function(path)
-    db.createscalarfunction("PATH_MATCH", path_match_function, 1)
+def install_function(db, name, callable, numargs=1, deterministic=False):
+    db.createscalarfunction(name, callable, numargs, deterministic)

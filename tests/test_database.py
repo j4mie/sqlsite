@@ -1,10 +1,4 @@
-from sqlsite.database import (
-    connect,
-    create_path_match_function,
-    install_path_match_function,
-    install_row_factory,
-    row_factory,
-)
+from sqlsite.database import connect, install_row_factory, row_factory
 
 
 class MockCursor:
@@ -38,18 +32,3 @@ def test_install_row_factory():
     assert result[1] == "b"
     assert result["col1"] == "a"
     assert result["col2"] == "b"
-
-
-def test_path_match_function():
-    path_match_function = create_path_match_function("path/")
-    assert path_match_function("path/")
-    assert path_match_function("path")
-    assert not path_match_function("otherpath/")
-
-
-def test_install_path_match_function():
-    db = connect(":memory:")
-    install_path_match_function(db, "path/")
-    assert db.cursor().execute("SELECT PATH_MATCH('path/')").fetchone()[0]
-    assert db.cursor().execute("SELECT PATH_MATCH('path')").fetchone()[0]
-    assert not db.cursor().execute("SELECT PATH_MATCH('otherpath/')").fetchone()[0]

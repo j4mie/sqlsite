@@ -1,5 +1,4 @@
 from .responses import Response
-from http import HTTPStatus
 
 
 def hello(request):

@@ -1,13 +1,18 @@
 from .database import connect
+from .exists import check_exists_query
 from .handlers import get_handler
 from .request import Request
 from .responses import NotFoundResponse
-from .routing import route
+from .routing import route, search_path
 
 
 def get_response(request):
     matched_route = route(request.db, request.path)
     if not matched_route:
+        return NotFoundResponse()
+    request.route = matched_route
+    request.url_params = search_path(matched_route["pattern"], request.path).groupdict()
+    if not check_exists_query(request):
         return NotFoundResponse()
     handler = get_handler(matched_route["handler"])
     response = handler(request)
