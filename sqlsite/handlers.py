@@ -1,7 +1,14 @@
 from . import sqlar
-from .responses import JSONResponse, NotFoundResponse, Response, StreamingResponse
+from .responses import (
+    HTMLResponse,
+    JSONResponse,
+    NotFoundResponse,
+    Response,
+    StreamingResponse,
+)
 from mimetypes import guess_type
 
+import jinja2
 import os
 
 
@@ -28,7 +35,7 @@ def static(request):
 
     blob = sqlar.get_blob(request.db, file_row)
     media_type = guess_type(path)[0] or "text/plain"
-    is_compressed = blob.length() != file_row["sz"]
+    is_compressed = file_row["sz"] != blob.length()
     headers = [("Content-Encoding", "deflate")] if is_compressed else []
 
     def chunks():
@@ -41,5 +48,33 @@ def static(request):
     return StreamingResponse(headers, chunks(), media_type, str(blob.length()))
 
 
+class SQLArchiveTemplateLoader(jinja2.BaseLoader):
+    def __init__(self, db):
+        self.db = db
+
+    def get_source(self, environment, template):
+        file_row = sqlar.get_row(self.db, template)
+        source = sqlar.get_data(self.db, file_row).decode("utf-8")
+        return source, template, lambda: False
+
+
+def template(request):
+    jinja2_env = jinja2.Environment(
+        loader=SQLArchiveTemplateLoader(request.db), autoescape=True,
+    )
+    template = jinja2_env.get_template(request.route.config)
+
+    def sql(sql, params=None):
+        params = params or {}
+        return request.db.cursor().execute(sql, params).fetchall()
+
+    context = {
+        "sql": sql,
+        "url": request.route.url_params,
+    }
+    content = template.render(context)
+    return HTMLResponse(content=content)
+
+
 def get_handler(name):
-    return {"hello": hello, "json": json, "static": static}[name]
+    return {"hello": hello, "json": json, "static": static, "template": template}[name]

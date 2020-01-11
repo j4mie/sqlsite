@@ -50,6 +50,11 @@ class JSONResponse(Response):
         super().__init__(content=json.dumps(data), content_type="application/json")
 
 
+class HTMLResponse(Response):
+    def __init__(self, *args, **kwargs):
+        super().__init__(content_type="text/html", *args, **kwargs)
+
+
 class StreamingResponse(Response):
     def __init__(self, headers, content_iterable, content_type, content_length=None):
         self.status = HTTPStatus.OK
