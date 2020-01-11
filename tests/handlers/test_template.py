@@ -28,3 +28,12 @@ def test_template_with_query(db):
     assert response.text == "<h1>hello sql</h1>"
     assert response.headers["Content-Type"] == "text/html"
     assert response.headers["Content-Length"] == "18"
+
+
+def test_missing_template(db):
+    create_route(db, "^$", "template", config="missingtemplate.html")
+    create_sqlar_file(db, "template.html", b"<h1>hello</h1>")
+    app = make_app(db)
+    client = httpx.Client(app=app)
+    response = client.get("http://test/")
+    assert response.status_code == 500

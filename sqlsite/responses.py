@@ -33,6 +33,13 @@ class Response:
         return ("Content-Type", self.content_type)
 
 
+class ErrorResponse(Response):
+    def __init__(self):
+        super().__init__(
+            status=HTTPStatus.INTERNAL_SERVER_ERROR, content="Server Error"
+        )
+
+
 class NotFoundResponse(Response):
     def __init__(self):
         super().__init__(status=HTTPStatus.NOT_FOUND, content="Not Found")

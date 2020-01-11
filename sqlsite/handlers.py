@@ -54,6 +54,8 @@ class SQLArchiveTemplateLoader(jinja2.BaseLoader):
 
     def get_source(self, environment, template):
         file_row = sqlar.get_row(self.db, template)
+        if not file_row:
+            raise jinja2.TemplateNotFound(template)
         source = sqlar.get_data(self.db, file_row).decode("utf-8")
         return source, template, lambda: False
 
