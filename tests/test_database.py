@@ -1,4 +1,4 @@
-from sqlsite.database import connect, install_row_factory, row_factory
+from sqlsite.database import connect, row_factory
 
 
 class MockCursor:
@@ -23,9 +23,8 @@ def test_row_factory():
     assert result["col2"] == "b"
 
 
-def test_install_row_factory():
+def test_row_factory_installed():
     db = connect(":memory:")
-    install_row_factory(db)
     sql = "WITH t(col1, col2) AS (VALUES ('a', 'b')) SELECT * FROM t"
     result = db.cursor().execute(sql).fetchone()
     assert result[0] == "a"

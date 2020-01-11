@@ -2,7 +2,9 @@ import apsw
 
 
 def connect(name):
-    return apsw.Connection(name)
+    db = apsw.Connection(name)
+    install_row_factory(db)
+    return db
 
 
 def row_factory(cursor, row):

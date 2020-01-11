@@ -1,4 +1,3 @@
-from sqlsite.database import connect, install_row_factory
 from zlib import compress
 
 
