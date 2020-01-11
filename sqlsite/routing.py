@@ -17,13 +17,13 @@ class MatchedRoute:
 
 
 def search_path(pattern, path):
+    if pattern.endswith("/$"):
+        pattern = pattern[:-2] + "/?$"
     return re.search(pattern, path)
 
 
 def create_path_match_function(path):
     def path_match(val):
-        if val.endswith("/$"):
-            val = val[:-2] + "/?$"
         return search_path(val, path) is not None
 
     return path_match

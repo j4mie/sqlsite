@@ -2,8 +2,12 @@ from .database import connect
 from .exists import check_exists_query
 from .handlers import get_handler
 from .request import Request
-from .responses import NotFoundResponse
+from .responses import NotFoundResponse, PermanentRedirectResponse
 from .routing import route, search_path
+
+
+def should_append_slash(request):
+    return request.route.pattern.endswith("/$") and not request.path.endswith("/")
 
 
 def get_response(request):
@@ -11,6 +15,8 @@ def get_response(request):
     if not matched_route:
         return NotFoundResponse()
     request.route = matched_route
+    if should_append_slash(request):
+        return PermanentRedirectResponse(f"/{request.path}/")
     if not check_exists_query(request):
         return NotFoundResponse()
     handler = get_handler(matched_route.handler)

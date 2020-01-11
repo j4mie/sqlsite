@@ -34,3 +34,10 @@ class Response:
 class NotFoundResponse(Response):
     def __init__(self):
         super().__init__(status=HTTPStatus.NOT_FOUND, content="Not Found")
+
+
+class PermanentRedirectResponse(Response):
+    def __init__(self, redirect_to):
+        super().__init__(
+            status=HTTPStatus.MOVED_PERMANENTLY, headers=[("Location", redirect_to)]
+        )
