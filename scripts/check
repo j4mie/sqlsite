@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+flake8 sqlsite tests
+isort --check --diff --recursive sqlsite tests
+black --check --diff sqlsite tests

@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+autoflake --in-place --recursive sqlsite tests
+isort --recursive sqlsite tests
+black sqlsite tests
