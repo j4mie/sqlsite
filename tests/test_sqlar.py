@@ -1,4 +1,3 @@
-from .fixtures import in_memory_db as db
 from .utils import create_sqlar_file
 from sqlsite.sqlar import get_data, get_row
 

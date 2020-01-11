@@ -1,4 +1,3 @@
-from .fixtures import in_memory_db as db
 from .utils import create_route
 from sqlsite.database import connect
 from sqlsite.routing import (

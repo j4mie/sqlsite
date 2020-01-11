@@ -1,4 +1,3 @@
-from ..fixtures import in_memory_db as db
 from ..utils import create_route, create_sqlar_file
 from sqlsite.wsgi import make_app
 
@@ -19,7 +18,13 @@ def test_template_handler(db):
 
 def test_template_with_query(db):
     create_route(db, "^$", "template", config="template.html")
-    template = b"{% with name = sql(\"VALUES('sql')\")[0][0] %}<h1>hello {{ name }}</h1>{% endwith %}"
+    template = "".join(
+        [
+            "{% with name = sql(\"VALUES('sql')\")[0][0] %}",
+            "<h1>hello {{ name }}</h1>",
+            "{% endwith %}",
+        ]
+    ).encode()
     create_sqlar_file(db, "template.html", template)
     app = make_app(db)
     client = httpx.Client(app=app)

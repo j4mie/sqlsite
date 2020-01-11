@@ -3,7 +3,7 @@ from .exists import check_exists_query
 from .handlers import get_handler
 from .request import Request
 from .responses import ErrorResponse, NotFoundResponse, PermanentRedirectResponse
-from .routing import route, search_path
+from .routing import route
 
 import logging
 
