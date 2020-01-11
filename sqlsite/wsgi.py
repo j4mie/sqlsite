@@ -11,10 +11,9 @@ def get_response(request):
     if not matched_route:
         return NotFoundResponse()
     request.route = matched_route
-    request.url_params = search_path(matched_route["pattern"], request.path).groupdict()
     if not check_exists_query(request):
         return NotFoundResponse()
-    handler = get_handler(matched_route["handler"])
+    handler = get_handler(matched_route.handler)
     response = handler(request)
     return response
 

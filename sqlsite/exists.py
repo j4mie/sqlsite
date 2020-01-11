@@ -5,6 +5,6 @@ def run_exists_query(db, query, params):
 
 
 def check_exists_query(request):
-    query = request.route["exists_query"]
-    params = request.url_params
-    return run_exists_query(request.db, query, params)
+    return run_exists_query(
+        request.db, request.route.exists_query, request.route.url_params
+    )

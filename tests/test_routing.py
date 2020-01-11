@@ -13,7 +13,7 @@ def test_route(db):
     create_route(db, "somepath/", "testhandler")
     path = "somepath/"
     result = route(db, path)
-    assert result["handler"] == "testhandler"
+    assert result.handler == "testhandler"
 
 
 def test_route_match(db):

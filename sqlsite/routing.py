@@ -5,6 +5,17 @@ import re
 PATH_MATCH_FUNCTION_NAME = "PATH_MATCH"
 
 
+class MatchedRoute:
+    __slots__ = ["pattern", "handler", "config", "exists_query", "url_params"]
+
+    def __init__(self, pattern, handler, config, exists_query, url_params):
+        self.pattern = pattern
+        self.handler = handler
+        self.config = config
+        self.exists_query = exists_query
+        self.url_params = url_params
+
+
 def search_path(pattern, path):
     return re.search(pattern, path)
 
@@ -35,4 +46,12 @@ def install_path_match_function(db, path):
 def route(db, path):
     install_path_match_function(db, path)
     query = f"SELECT * FROM route WHERE {PATH_MATCH_FUNCTION_NAME}(pattern) LIMIT 1"
-    return db.cursor().execute(query).fetchone()
+    row = db.cursor().execute(query).fetchone()
+    if row:
+        return MatchedRoute(
+            pattern=row["pattern"],
+            handler=row["handler"],
+            config=row["config"],
+            exists_query=row["exists_query"],
+            url_params=search_path(row["pattern"], path).groupdict(),
+        )
