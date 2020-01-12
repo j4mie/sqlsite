@@ -39,6 +39,8 @@ def ensure_sqlar_table(db):
 
 def create_sqlar_file(db, name, data):
     ensure_sqlar_table(db)
+    compressed = compress(data)
+    maybe_compressed_data = compressed if len(compressed) < len(data) else data
     sql = "INSERT INTO sqlar VALUES (:name, 33188, time('now'), :sz, :data)"
-    params = {"name": name, "data": compress(data), "sz": len(data)}
+    params = {"name": name, "data": maybe_compressed_data, "sz": len(data)}
     db.cursor().execute(sql, params)
