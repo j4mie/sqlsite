@@ -41,3 +41,16 @@ def test_missing_template(db):
     client = httpx.Client(app=app)
     response = client.get("http://test/")
     assert response.status_code == 500
+
+
+def test_markdown(db):
+    create_route(db, "^$", "template", config="template.html")
+    template = b"{{ '# hello markdown' | markdown }}"
+    create_sqlar_file(db, "template.html", template)
+    app = make_app(db)
+    client = httpx.Client(app=app)
+    response = client.get("http://test/")
+    assert response.status_code == 200
+    assert response.text.strip() == "<h1>hello markdown</h1>"
+    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Length"] == "24"

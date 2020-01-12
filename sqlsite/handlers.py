@@ -11,6 +11,11 @@ from mimetypes import guess_type
 import jinja2
 import os
 
+try:
+    import misaka
+except ImportError:
+    misaka = None
+
 
 def hello(request):
     return Response(content="Hello from SQLSite")
@@ -60,10 +65,16 @@ class SQLArchiveTemplateLoader(jinja2.BaseLoader):
         return source, template, lambda: False
 
 
+def markdown_filter(*args, **kwargs):
+    return jinja2.Markup(misaka.html(*args, **kwargs))
+
+
 def template(request):
     jinja2_env = jinja2.Environment(
         loader=SQLArchiveTemplateLoader(request.db), autoescape=True,
     )
+    if misaka:
+        jinja2_env.filters["markdown"] = markdown_filter
     template = jinja2_env.get_template(request.route.config)
 
     def sql(sql, params=None):

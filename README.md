@@ -96,9 +96,17 @@ Queries run using the `sql` function can contain [named parameters](https://sqli
 For example, given the route pattern `^blog/(?P<slug>[-a-zA-Z0-9_]+)/$`, your template may contain the following on the blog post detail page:
 
 ```html
-{% with post = sql("SELECT 1 FROM blogpost WHERE slug=:slug", {"slug": url.slug})[0] %}
+{% with post = sql("SELECT title, content FROM blogpost WHERE slug=:slug", {"slug": url.slug})[0] %}
 <h2>{{ post.title }}</h2>
 {% endwith %}
+```
+
+#### Rendering Markdown
+
+SQLSite has support for rendering Markdown in your templates using the [Misaka](https://misaka.61924.nl/) library. If Misaka is installed (`pip install misaka`) then a `markdown` filter becomes available in your templates:
+
+```
+{{ post.content | markdown }}
 ```
 
 ### `static` handler
