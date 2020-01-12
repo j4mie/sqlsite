@@ -1,5 +1,7 @@
 # SQLSite
 
+[![Build Status](https://travis-ci.org/j4mie/sqlsite.svg?branch=master)](https://travis-ci.org/j4mie/sqlsite)
+
 A tool for serving simple websites and JSON APIs directly from a [SQLite](https://sqlite.org/) database.
 
 ## Why?
