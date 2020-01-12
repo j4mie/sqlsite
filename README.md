@@ -2,8 +2,7 @@
 
 [![Build Status](https://travis-ci.org/j4mie/sqlsite.svg?branch=master)](https://travis-ci.org/j4mie/sqlsite)
 
-A tool for serving simple websites and JSON APIs directly from a [SQLite](https://sqlite.org/) database.
-
+A tool for serving simple websites, static files and JSON APIs directly from a [SQLite](https://sqlite.org/) database.
 ## Why?
 
 SQLite is a fantastic way of storing data in a safe, well-structured, uniform way and querying it quickly. This project helps you expose that data to the web.
