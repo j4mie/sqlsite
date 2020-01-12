@@ -3,6 +3,7 @@ from .responses import (
     HTMLResponse,
     JSONResponse,
     NotFoundResponse,
+    PermanentRedirectResponse,
     Response,
     StreamingResponse,
 )
@@ -89,5 +90,18 @@ def template(request):
     return HTMLResponse(content=content)
 
 
+def redirect(request):
+    sql = request.route.config
+    params = request.route.url_params
+    location = request.db.cursor().execute(sql, params).fetchone()[0]
+    return PermanentRedirectResponse(location)
+
+
 def get_handler(name):
-    return {"hello": hello, "json": json, "static": static, "template": template}[name]
+    return {
+        "hello": hello,
+        "json": json,
+        "redirect": redirect,
+        "static": static,
+        "template": template,
+    }[name]

@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- New `redirect` handler to redirect incoming requests to other locations.
+
 ### Changed
 - The SQLite database is now opened in read-only mode (`SQLITE_OPEN_READONLY`).
 
