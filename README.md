@@ -51,7 +51,7 @@ This is a regular expression that defines the URL that will be matched by the ro
 
 ### `handler`
 
-This is the name of the handler that should respond to HTTP requests whose path matches the given `pattern`. Valid handlers are `template`, `json` and `static`. See [below](#handlers) for details of each handler.
+This is the name of the handler that should respond to HTTP requests whose path matches the given `pattern`. Valid handlers are `template`, `json`, `static` and `redirect`. See [below](#handlers) for details of each handler.
 
 ### `config`
 
@@ -124,6 +124,26 @@ For example, to serve static files under the URL prefix `media`, using the path 
 ### `json` handler
 
 This handler takes the results of a query and serializes it into a list of JSON objects. The `config` field should be the query to execute.
+
+### `redirect` handler
+
+This handler returns a `301 Permanent Redirect` response. The `config` field should be an SQL query that returns the `Location` to redirect to. The SQL query can contain [named parameters](https://sqlite.org/lang_expr.html#varparam) which will be populated with captured values from the route's URL pattern.
+
+For example, to redirect a single, static path:
+
+```sql
+INSERT INTO route (pattern, handler, config)
+VALUES ('^before/$', 'redirect', 'SELECT "/after/"')
+```
+
+To route dynamically, try:
+
+```sql
+INSERT INTO route (pattern, handler, config)
+VALUES ('^before/(?P<slug>[-a-zA-Z0-9_]+)/$', 'redirect', 'SELECT "/after/" || :slug || "/"')
+```
+
+Of course, your query can perform any arbirary operations such as looking up redirects in a table etc.
 
 ## SQLite Archives
 
