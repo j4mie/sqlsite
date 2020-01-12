@@ -52,6 +52,13 @@ class PermanentRedirectResponse(Response):
         )
 
 
+class MethodNotAllowedResponse(Response):
+    def __init__(self):
+        super().__init__(
+            status=HTTPStatus.METHOD_NOT_ALLOWED, content="Method not allowed"
+        )
+
+
 class JSONResponse(Response):
     def __init__(self, data):
         super().__init__(content=json.dumps(data), content_type="application/json")

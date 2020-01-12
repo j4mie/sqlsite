@@ -2,7 +2,12 @@ from .database import connect
 from .exists import check_exists_query
 from .handlers import get_handler
 from .request import Request
-from .responses import ErrorResponse, NotFoundResponse, PermanentRedirectResponse
+from .responses import (
+    ErrorResponse,
+    MethodNotAllowedResponse,
+    NotFoundResponse,
+    PermanentRedirectResponse,
+)
 from .routing import route
 
 import logging
@@ -14,7 +19,13 @@ def should_append_slash(request):
     return request.route.pattern.endswith("/$") and not request.path.endswith("/")
 
 
+def method_allowed(request):
+    return request.method in {"GET", "HEAD"}
+
+
 def get_response(request):
+    if not method_allowed(request):
+        return MethodNotAllowedResponse()
     matched_route = route(request.db, request.path)
     if not matched_route:
         return NotFoundResponse()
