@@ -1,4 +1,6 @@
-from sqlsite.database import connect, row_factory
+from sqlsite.database import connect, get_readonly_connection, row_factory
+
+import apsw
 
 
 class MockCursor:
@@ -34,13 +36,18 @@ def test_row_factory_installed():
 
 
 def test_database_name_default(mocker):
-    mock_connection = mocker.patch("apsw.Connection")
+    mock = mocker.patch("sqlsite.database.get_readonly_connection")
     connect()
-    assert mock_connection.called_with("db.sqlite")
+    mock.assert_called_with("db.sqlite")
 
 
 def test_database_name_env_var(mocker):
     mocker.patch.dict("os.environ", {"SQLSITE_DATABASE": "somedb.sqlite"})
-    mock_connection = mocker.patch("apsw.Connection")
+    mock = mocker.patch("sqlsite.database.get_readonly_connection")
     connect()
-    assert mock_connection.called_with("somedb.sqlite")
+    mock.assert_called_with("somedb.sqlite")
+
+
+def test_database_opened_readonly(mocker):
+    db = get_readonly_connection(":memory:")
+    assert db.open_flags == apsw.SQLITE_OPEN_READONLY

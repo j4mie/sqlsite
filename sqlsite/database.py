@@ -2,9 +2,13 @@ import apsw
 import os
 
 
+def get_readonly_connection(name):
+    return apsw.Connection(name, flags=apsw.SQLITE_OPEN_READONLY)
+
+
 def connect(name=None):
     name = name or os.environ.get("SQLSITE_DATABASE", "db.sqlite")
-    db = apsw.Connection(name)
+    db = get_readonly_connection(name)
     install_row_factory(db)
     return db
 
