@@ -6,7 +6,7 @@ import httpx
 
 
 def test_template_handler(db):
-    create_route(db, "^(?P<name>[a-z]+)/$", "template", config="template.html")
+    create_route(db, "<str:name>/", "template", config="template.html")
     create_sqlar_file(db, "template.html", b"<h1>hello {{ url.name }}</h1>")
     app = make_app(db)
     client = httpx.Client(app=app)
@@ -18,7 +18,7 @@ def test_template_handler(db):
 
 
 def test_template_with_query(db):
-    create_route(db, "^$", "template", config="template.html")
+    create_route(db, "", "template", config="template.html")
     template = """
     {% with name = sql(\"VALUES('sql')\")[0][0] %}
     <h1>hello {{ name }}</h1>
@@ -35,7 +35,7 @@ def test_template_with_query(db):
 
 
 def test_missing_template(db):
-    create_route(db, "^$", "template", config="missingtemplate.html")
+    create_route(db, "", "template", config="missingtemplate.html")
     create_sqlar_file(db, "template.html", b"<h1>hello</h1>")
     app = make_app(db)
     client = httpx.Client(app=app)
@@ -44,7 +44,7 @@ def test_missing_template(db):
 
 
 def test_markdown(db):
-    create_route(db, "^$", "template", config="template.html")
+    create_route(db, "", "template", config="template.html")
     template = b"{{ '# hello markdown' | markdown }}"
     create_sqlar_file(db, "template.html", template)
     app = make_app(db)

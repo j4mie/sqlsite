@@ -5,7 +5,7 @@ import httpx
 
 
 def test_hello_world(db):
-    create_route(db, "^$", "hello")
+    create_route(db, "", "hello")
     app = make_app(db)
     client = httpx.Client(app=app)
     response = client.get("http://test/")
@@ -16,7 +16,7 @@ def test_hello_world(db):
 
 
 def test_not_found(db):
-    create_route(db, "^$", "hello")
+    create_route(db, "", "hello")
     app = make_app(db)
     client = httpx.Client(app=app)
     response = client.get("http://test/notfound")

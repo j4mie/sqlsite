@@ -6,7 +6,7 @@ import httpx
 
 def test_json_handler(db):
     sql = "WITH t(greeting) AS (VALUES('hello')) SELECT * FROM t"
-    create_route(db, "^$", "json", config=sql)
+    create_route(db, "", "json", config=sql)
     app = make_app(db)
     client = httpx.Client(app=app)
     response = client.get("http://test/")

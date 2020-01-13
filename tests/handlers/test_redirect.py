@@ -6,7 +6,7 @@ import httpx
 
 def test_redirect_handler(db):
     sql = "SELECT '/after/' || :slug || '/'"
-    create_route(db, "^before/(?P<slug>[-a-zA-Z0-9_]+)/$", "redirect", config=sql)
+    create_route(db, "before/<slug:slug>/", "redirect", config=sql)
     app = make_app(db)
     client = httpx.Client(app=app)
     response = client.get("http://test/before/hello/", allow_redirects=False)
