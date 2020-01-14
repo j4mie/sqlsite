@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/j4mie/sqlsite.svg?branch=master)](https://travis-ci.org/j4mie/sqlsite)
 
 A tool for serving simple websites, static files and JSON APIs directly from a [SQLite](https://sqlite.org/) database.
+
 ## Why?
 
 SQLite is a fantastic way of storing data in a safe, well-structured, uniform way and querying it quickly. This project helps you expose that data to the web.
@@ -42,11 +43,29 @@ The columns of this table are:
 
 ### `pattern`
 
-This is a regular expression that defines the URL that will be matched by the route. It is identical to Django's "old fashioned" (pre-`path`) regex-based URL routing syntax. You can use named capturing groups to extract values from the path. Some examples:
+This is a pattern that defines which incoming URL path or paths will be matched by the route. For example:
 
-* `^$` - matches the root (`/`)
-* `^blog/$` - matches `/blog/`
-* `^blog/(?P<slug>[-a-zA-Z0-9_]+)/$` - matches `/blog/<slug>/`, where `<slug>` is any lowercase or uppercase letter, digit, `-` or `_`
+* `` - matches the root path (`/`)
+* `blog/` - matches `/blog/`
+
+Patterns can also be dynamic: they can contain parameters which will be extracted from the path. Parameter syntax is based on similar `<type:name>` functionality in Django and Flask.
+
+* `blog/<int:year>/` - matches (for example) `/blog/2019/` and `/blog/2020/`.
+* `blog/<slug:slug>/` - matches `/blog/some-blog-post-slug/`
+
+Available types are:
+
+* `str` - matches any text without a slash
+* `path` - like `str` but also accepts slashes
+* `int` - matches positive integers
+* `uuid` - matches formatted UUIDs (lowercase, with dashes)
+* `slug` - matches any string consisting of ASCII letters or numbers, plus the hyphen and underscore characters
+
+Things to note:
+
+* Do not include a leading `/` in your patterns.
+* If your pattern ends with a `/`, incoming paths that do _not_ end with a slash will 301 redirect to the version _with_ the trailing slash. If your pattern does _not_ end with a `/`, it will be matched against the incoming path exactly (ie will not redirect).
+* Unlike with Django and Flask, there is no default type for parameters. You must specify both the type and the name for each parameter.
 
 ### `handler`
 
@@ -94,7 +113,7 @@ Your Jinja template will be rendered with a special function included in its con
 
 Queries run using the `sql` function can contain [named parameters](https://sqlite.org/lang_expr.html#varparam). The optional second argument to `sql` is a dictionary of parameter values. The context for your template contains a variable called `url`, which is a dictionary containing all values captured from the URL pattern.
 
-For example, given the route pattern `^blog/(?P<slug>[-a-zA-Z0-9_]+)/$`, your template may contain the following on the blog post detail page:
+For example, given the route pattern `blog/<slug:slug>/`, your template may contain the following on the blog post detail page:
 
 ```html
 {% with post = sql("SELECT title, content FROM blogpost WHERE slug=:slug", {"slug": url.slug})[0] %}
@@ -116,9 +135,16 @@ This handler serves static files. **It does not serve files stored in the filesy
 
 If you use the `static` handler, the `config` field for the route should be set to the path prefix ("directory") inside the archive from which to serve files. For example, to serve files that are prefixed with `static`, you should set the value of the `config` column to `static`.
 
-The `pattern` for the route _must_ include a named capturing group called `name`, which should capture the rest of the filename after the prefix you supplied in `config`.
+The `pattern` for the route _must_ include a parameter called `name`, which should capture the rest of the filename after the prefix you supplied in `config`. You should use the `path` parameter type.
 
-For example, to serve static files under the URL prefix `media`, using the path prefix `static`, you should set `pattern` to `^media/(?P<name>.+)$`, `handler` to `static` and `config` to `static`. There is no need to set the `exists_query` column: the handler will automatically return 404 if the file does not exist inside the archive.
+For example, to serve static files under the URL prefix `media`, using the filename prefix `staticdir`, use:
+
+```sql
+INSERT INTO route (pattern, handler, config)
+VALUES ('media/<path:name>', 'static', 'staticdir')
+```
+
+There is no need to populate the `exists_query` column: the handler will automatically return 404 if the file does not exist inside the archive.
 
 ### `json` handler
 
@@ -132,14 +158,14 @@ For example, to redirect a single, static path:
 
 ```sql
 INSERT INTO route (pattern, handler, config)
-VALUES ('^before/$', 'redirect', 'SELECT "/after/"')
+VALUES ('before/', 'redirect', 'SELECT "/after/"')
 ```
 
 To route dynamically, try:
 
 ```sql
 INSERT INTO route (pattern, handler, config)
-VALUES ('^before/(?P<slug>[-a-zA-Z0-9_]+)/$', 'redirect', 'SELECT "/after/" || :slug || "/"')
+VALUES ('before/<slug:slug>/', 'redirect', 'SELECT "/after/" || :slug || "/"')
 ```
 
 Of course, your query can perform any arbirary operations such as looking up redirects in a table etc.
