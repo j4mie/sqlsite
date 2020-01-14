@@ -17,13 +17,13 @@ PATTERN_PARAM_TYPES = {
 
 
 class MatchedRoute:
-    __slots__ = ["pattern", "handler", "config", "exists_query", "url_params"]
+    __slots__ = ["pattern", "handler", "config", "existsquery", "url_params"]
 
-    def __init__(self, pattern, handler, config, exists_query, url_params):
+    def __init__(self, pattern, handler, config, existsquery, url_params):
         self.pattern = pattern
         self.handler = handler
         self.config = config
-        self.exists_query = exists_query
+        self.existsquery = existsquery
         self.url_params = url_params
 
 
@@ -96,6 +96,6 @@ def route(db, path):
             pattern=row["pattern"],
             handler=row["handler"],
             config=row["config"],
-            exists_query=row["exists_query"],
+            existsquery=row["existsquery"],
             url_params=search_path(row["pattern"], path).groupdict(),
         )

@@ -1,5 +1,5 @@
 from .database import connect
-from .exists import check_exists_query
+from .exists import check_existsquery
 from .handlers import get_handler
 from .request import Request
 from .responses import (
@@ -32,7 +32,7 @@ def get_response(request):
     request.route = matched_route
     if should_append_slash(request):
         return PermanentRedirectResponse(f"/{request.path}/")
-    if not check_exists_query(request):
+    if not check_existsquery(request):
         return NotFoundResponse()
     handler = get_handler(matched_route.handler)
     response = handler(request)

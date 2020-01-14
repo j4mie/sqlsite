@@ -7,19 +7,19 @@ def create_route_table(db):
         pattern TEXT PRIMARY KEY NOT NULL,
         handler TEXT NOT NULL,
         config TEXT NOT NULL,
-        exists_query TEXT
+        existsquery TEXT
     );
     """
     db.cursor().execute(sql)
 
 
-def create_route(db, pattern, handler, config="", exists_query=None):
-    sql = "INSERT INTO route VALUES (:pattern, :handler, :config, :exists_query)"
+def create_route(db, pattern, handler, config="", existsquery=None):
+    sql = "INSERT INTO route VALUES (:pattern, :handler, :config, :existsquery)"
     params = {
         "pattern": pattern,
         "handler": handler,
         "config": config,
-        "exists_query": exists_query,
+        "existsquery": existsquery,
     }
     db.cursor().execute(sql, params)
 
