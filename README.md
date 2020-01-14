@@ -35,7 +35,7 @@ CREATE TABLE route (
     pattern TEXT PRIMARY KEY NOT NULL,
     handler TEXT NOT NULL,
     config TEXT NOT NULL,
-    exists_query TEXT
+    existsquery TEXT
 );
 ```
 
@@ -75,11 +75,11 @@ This is the name of the handler that should respond to HTTP requests whose path 
 
 Configuration for the handler. The meaning of this field is different for each handler. See [below](#handlers) for details.
 
-### `exists_query`
+### `existsquery`
 
-This column is optional. If it is used, it should contain an SQL query that will be executed before your handler runs, and should return a single boolean value. If the value is `0`, the handler will not run and instead `404 Not Found` will be returned. The SQL query can contain [named parameters](https://sqlite.org/lang_expr.html#varparam) which will be populated with captured values from the route's URL pattern.
+This column is optional. If it is used, it should contain an SQL query that will be executed before your handler runs, and should return a single row with a single column containing a boolean value. If the value is `0`, the handler will not run and instead `404 Not Found` will be returned. The SQL query can contain [named parameters](https://sqlite.org/lang_expr.html#varparam) which will be populated with captured values from the route's URL pattern.
 
-This allows you to check whether a row in the database exists before attempting to render it. An example value for the `exists_query` column might be:
+This allows you to check whether a row in the database exists before attempting to render it. An example value for the `existsquery` column might be:
 
 `SELECT EXISTS(SELECT 1 FROM blogpost WHERE slug=:slug)`
 
@@ -144,7 +144,7 @@ INSERT INTO route (pattern, handler, config)
 VALUES ('media/<path:name>', 'static', 'staticdir')
 ```
 
-There is no need to populate the `exists_query` column: the handler will automatically return 404 if the file does not exist inside the archive.
+There is no need to populate the `existsquery` column: the handler will automatically return 404 if the file does not exist inside the archive.
 
 ### `json` handler
 

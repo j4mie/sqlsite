@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New `redirect` handler to redirect incoming requests to other locations.
 - BACKWARDS INCOMPATIBLE: changed to new `<type:param>` URL parameter syntax.
+- BACKWARDS INCOMPATIBLE: changed the `exists_query` column to `existsquery`.
 
 ### Changed
 - The SQLite database is now opened in read-only mode (`SQLITE_OPEN_READONLY`).
