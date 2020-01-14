@@ -7,6 +7,7 @@ from .responses import (
     Response,
     StreamingResponse,
 )
+from .sql import maybe_get_sql_from_file
 from mimetypes import guess_type
 
 import jinja2
@@ -23,7 +24,7 @@ def hello(request):
 
 
 def json(request):
-    sql = request.route.config
+    sql = maybe_get_sql_from_file(request.db, request.route.config)
     params = request.route.url_params
     results = request.db.cursor().execute(sql, params).fetchall()
     results_with_string_keys_only = [
@@ -78,7 +79,8 @@ def template(request):
         jinja2_env.filters["markdown"] = markdown_filter
     template = jinja2_env.get_template(request.route.config)
 
-    def sql(sql, params=None):
+    def sql(sql_or_prefixed_filename, params=None):
+        sql = maybe_get_sql_from_file(request.db, sql_or_prefixed_filename)
         params = params or {}
         return request.db.cursor().execute(sql, params).fetchall()
 
@@ -91,7 +93,7 @@ def template(request):
 
 
 def redirect(request):
-    sql = request.route.config
+    sql = maybe_get_sql_from_file(request.db, request.route.config)
     params = request.route.url_params
     location = request.db.cursor().execute(sql, params).fetchone()[0]
     return PermanentRedirectResponse(location)

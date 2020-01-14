@@ -1,4 +1,4 @@
-from .utils import create_route
+from .utils import create_route, create_sqlar_file
 from sqlsite.exists import run_existsquery
 from sqlsite.wsgi import make_app
 
@@ -15,6 +15,12 @@ def test_existsquery_returns_false(db):
 
 def test_missing_existsquery_returns_true(db):
     assert run_existsquery(db, "", {})
+
+
+def test_existsquery_in_file(db):
+    query = "SELECT 0"
+    create_sqlar_file(db, "query.sql", query.encode())
+    assert not run_existsquery(db, "file=query.sql", {})
 
 
 def test_existsquery_request(db):
