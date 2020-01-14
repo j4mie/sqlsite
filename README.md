@@ -154,6 +154,8 @@ There is no need to populate the `existsquery` column: the handler will automati
 
 This handler takes the results of a query and serializes it into a list of JSON objects. The `config` field should be the query to execute.
 
+You can also put your query inside a file in the [SQLite Archive](https://sqlite.org/sqlar.html) and use `file=yourfilename.sql` in the `config` column.
+
 ### `redirect` handler
 
 This handler returns a `301 Permanent Redirect` response. The `config` field should be an SQL query that returns the `Location` to redirect to. The SQL query can contain [named parameters](https://sqlite.org/lang_expr.html#varparam) which will be populated with captured values from the route's URL pattern.

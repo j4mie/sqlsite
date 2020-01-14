@@ -24,7 +24,7 @@ def hello(request):
 
 
 def json(request):
-    sql = request.route.config
+    sql = maybe_get_sql_from_file(request.db, request.route.config)
     params = request.route.url_params
     results = request.db.cursor().execute(sql, params).fetchall()
     results_with_string_keys_only = [
