@@ -1,3 +1,4 @@
+from functools import lru_cache
 from sqlsite.database import install_function
 
 import re
@@ -26,10 +27,12 @@ class MatchedRoute:
         self.url_params = url_params
 
 
+@lru_cache
 def pattern_to_regex(pattern):
     """
     Convert a pattern containing <type:name> syntax to a regex.
-    Based on similar code in Django.
+    Based on similar code in Django. This is trivially cacheable
+    as the same input pattern will always return the same regex.
     """
     parts = ["^"]
     while True:
