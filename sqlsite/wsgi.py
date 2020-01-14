@@ -16,7 +16,7 @@ logger = logging.getLogger("sqlsite")
 
 
 def should_append_slash(request):
-    return request.route.pattern.endswith("/$") and not request.path.endswith("/")
+    return request.route.pattern.endswith("/") and not request.path.endswith("/")
 
 
 def method_allowed(request):

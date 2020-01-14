@@ -18,7 +18,7 @@ def test_missing_exists_query_returns_true(db):
 
 
 def test_exists_query_request(db):
-    create_route(db, "^$", "hello", exists_query="SELECT 0")
+    create_route(db, "", "hello", exists_query="SELECT 0")
     app = make_app(db)
     client = httpx.Client(app=app)
     response = client.get("http://test/")
