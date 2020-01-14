@@ -27,7 +27,7 @@ class MatchedRoute:
         self.url_params = url_params
 
 
-@lru_cache
+@lru_cache(maxsize=64)
 def pattern_to_regex(pattern):
     """
     Convert a pattern containing <type:name> syntax to a regex.
