@@ -93,7 +93,7 @@ def template(request):
 
 
 def redirect(request):
-    sql = request.route.config
+    sql = maybe_get_sql_from_file(request.db, request.route.config)
     params = request.route.url_params
     location = request.db.cursor().execute(sql, params).fetchone()[0]
     return PermanentRedirectResponse(location)

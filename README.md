@@ -176,6 +176,8 @@ VALUES ('before/<slug:slug>/', 'redirect', 'SELECT "/after/" || :slug || "/"')
 
 Of course, your query can perform any arbirary operations such as looking up redirects in a table etc.
 
+You can also put your query inside a file in the [SQLite Archive](https://sqlite.org/sqlar.html) and use `file=yourfilename.sql` in the `config` column.
+
 ## SQLite Archives
 
 SQLSite stores the HTML templates and static files needed to build your website _inside the SQLite database itself_. To do this, it uses the [SQLite Archive](https://sqlite.org/sqlar.html) format. Please read the SQLite documentation for full details of this feature, but a quick primer is below.
