@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New `redirect` handler to redirect incoming requests to other locations.
 - The `sql` template function now supports `file=` prefix, for loading SQL from a file.
+- The `existsquery` column can now contain a `file=`-prefixed filename.
 
 ### Changed
 - The SQLite database is now opened in read-only mode (`SQLITE_OPEN_READONLY`).

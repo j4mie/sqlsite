@@ -83,6 +83,8 @@ This allows you to check whether a row in the database exists before attempting 
 
 `SELECT EXISTS(SELECT 1 FROM blogpost WHERE slug=:slug)`
 
+You can also put your query inside a file in the [SQLite Archive](https://sqlite.org/sqlar.html) and use `file=yourfilename.sql` in the `existsquery` column.
+
 ## Handlers
 
 ### `template` handler
