@@ -121,6 +121,8 @@ For example, given the route pattern `blog/<slug:slug>/`, your template may cont
 {% endwith %}
 ```
 
+You can also put your SQL into a file (which, like the template, must be stored inside the SQLite Archive) by passing the filename prefixed with `file=` to the `sql` template function, rather than an SQL string.
+
 #### Rendering Markdown
 
 SQLSite has support for rendering Markdown in your templates using the [Misaka](https://misaka.61924.nl/) library. If Misaka is installed (`pip install misaka`) then a `markdown` filter becomes available in your templates:

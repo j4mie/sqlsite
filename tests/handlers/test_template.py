@@ -34,6 +34,25 @@ def test_template_with_query(db):
     assert response.headers["Content-Length"] == "21"
 
 
+def test_template_with_query_in_file(db):
+    create_route(db, "", "template", config="template.html")
+    template = """
+    {% with name = sql("file=query.sql")[0][0] %}
+    <h1>hello {{ name }}</h1>
+    {% endwith %}
+    """
+    query = "VALUES('sql')"
+    create_sqlar_file(db, "template.html", dedent(template).encode())
+    create_sqlar_file(db, "query.sql", query.encode())
+    app = make_app(db)
+    client = httpx.Client(app=app)
+    response = client.get("http://test/")
+    assert response.status_code == 200
+    assert response.text.strip() == "<h1>hello sql</h1>"
+    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Length"] == "21"
+
+
 def test_missing_template(db):
     create_route(db, "", "template", config="missingtemplate.html")
     create_sqlar_file(db, "template.html", b"<h1>hello</h1>")
