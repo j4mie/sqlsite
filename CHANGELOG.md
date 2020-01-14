@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.2] - 2019-01-14
+
 ### Added
 - New `redirect` handler to redirect incoming requests to other locations.
 - The `sql` template function now supports `file=` prefix, for loading SQL from a file.
