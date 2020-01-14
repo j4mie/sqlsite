@@ -45,7 +45,7 @@ The columns of this table are:
 
 This is a pattern that defines which incoming URL path or paths will be matched by the route. For example:
 
-* `` - matches the root path (`/`)
+* An empty string matches the root path (`/`)
 * `blog/` - matches `/blog/`
 
 Patterns can also be dynamic: they can contain parameters which will be extracted from the path. Parameter syntax is based on similar `<type:name>` functionality in Django and Flask.
