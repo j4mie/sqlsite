@@ -11,7 +11,7 @@ def test_hello_world(db):
     response = client.get("http://test/")
     assert response.status_code == 200
     assert response.text == "Hello from SQLSite"
-    assert response.headers["Content-Type"] == "text/plain"
+    assert response.headers["Content-Type"] == "text/plain; charset=utf-8"
     assert response.headers["Content-Length"] == "18"
 
 
@@ -22,7 +22,7 @@ def test_not_found(db):
     response = client.get("http://test/notfound")
     assert response.status_code == 404
     assert response.text == "Not Found"
-    assert response.headers["Content-Type"] == "text/plain"
+    assert response.headers["Content-Type"] == "text/plain; charset=utf-8"
 
 
 def test_add_trailing_slash(db):

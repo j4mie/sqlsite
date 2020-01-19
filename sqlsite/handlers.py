@@ -4,7 +4,7 @@ from .responses import (
     JSONResponse,
     NotFoundResponse,
     PermanentRedirectResponse,
-    Response,
+    PlainTextResponse,
     StreamingResponse,
 )
 from .sql import maybe_get_sql_from_file
@@ -20,7 +20,7 @@ except ImportError:
 
 
 def hello(request):
-    return Response(content="Hello from SQLSite")
+    return PlainTextResponse(content="Hello from SQLSite")
 
 
 def json(request):
