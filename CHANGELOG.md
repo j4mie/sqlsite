@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Correctly add charset to Content-Type header for text responses.
+- Fix Content-Length header when body contains non-ASCII characters.
+
 ## [0.0.2] - 2019-01-14
 
 ### Added
