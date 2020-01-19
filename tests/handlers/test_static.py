@@ -2,10 +2,8 @@ from ..utils import create_route, create_sqlar_file
 from sqlsite.wsgi import make_app
 
 import httpx
-import pytest
 
 
-@pytest.mark.skip("Something weird is going on with httpx")
 def test_static_handler(db):
     create_route(db, "<path:name>", "static", config="")
     create_sqlar_file(db, "hello.txt", b"hello")
