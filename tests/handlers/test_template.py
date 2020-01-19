@@ -13,7 +13,7 @@ def test_template_handler(db):
     response = client.get("http://test/world/")
     assert response.status_code == 200
     assert response.text == "<h1>hello world</h1>"
-    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Type"] == "text/html; charset=utf-8"
     assert response.headers["Content-Length"] == "20"
 
 
@@ -30,7 +30,7 @@ def test_template_with_query(db):
     response = client.get("http://test/")
     assert response.status_code == 200
     assert response.text.strip() == "<h1>hello sql</h1>"
-    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Type"] == "text/html; charset=utf-8"
     assert response.headers["Content-Length"] == "21"
 
 
@@ -47,7 +47,7 @@ def test_template_with_query_and_params(db):
     response = client.get("http://test/")
     assert response.status_code == 200
     assert response.text.strip() == "<h1>hello arg</h1>"
-    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Type"] == "text/html; charset=utf-8"
     assert response.headers["Content-Length"] == "21"
 
 
@@ -66,7 +66,7 @@ def test_template_with_query_in_file(db):
     response = client.get("http://test/")
     assert response.status_code == 200
     assert response.text.strip() == "<h1>hello sql</h1>"
-    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Type"] == "text/html; charset=utf-8"
     assert response.headers["Content-Length"] == "21"
 
 
@@ -88,5 +88,5 @@ def test_markdown(db):
     response = client.get("http://test/")
     assert response.status_code == 200
     assert response.text.strip() == "<h1>hello markdown</h1>"
-    assert response.headers["Content-Type"] == "text/html"
+    assert response.headers["Content-Type"] == "text/html; charset=utf-8"
     assert response.headers["Content-Length"] == "24"
