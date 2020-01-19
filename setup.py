@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sqlsite",
-    version="0.0.2",
+    version="0.0.3",
     author="Jamie Matthews",
     author_email="jamie@mtth.org",
     description="A tool for serving simple websites, JSON APIs and static files directly from a SQLite database.",
