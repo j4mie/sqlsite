@@ -14,7 +14,8 @@ class Response:
     ):
         self.status = status
         self.headers = headers
-        self.content = content
+        self.content = content.encode("utf-8")
+        self.content_length = len(self.content)
         self.content_type = content_type
         self.charset = charset
 
@@ -30,10 +31,10 @@ class Response:
         return [header for header in headers if header]
 
     def get_content(self):
-        return [self.content.encode("utf-8")]
+        return [self.content]
 
     def get_content_length_header(self):
-        return ("Content-Length", str(len(self.content)))
+        return ("Content-Length", str(self.content_length))
 
     def get_content_type_header(self):
         return (
