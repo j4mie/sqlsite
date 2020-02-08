@@ -27,11 +27,7 @@ def json(request):
     sql = maybe_get_sql_from_file(request.db, request.route.config)
     params = request.route.url_params
     results = request.db.cursor().execute(sql, params).fetchall()
-    results_with_string_keys_only = [
-        {key: result[key] for key in result.keys() if isinstance(key, str)}
-        for result in results
-    ]
-    return JSONResponse(results_with_string_keys_only)
+    return JSONResponse(results)
 
 
 def static(request):
