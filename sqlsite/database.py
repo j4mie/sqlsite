@@ -8,6 +8,7 @@ class Row(dict):
     by index. This implementation works because dictionaries in Python
     3.7+ are guaranteed to return their values in insertion order.
     """
+
     def __getitem__(self, key):
         if isinstance(key, int):
             return list(self.values())[key]
