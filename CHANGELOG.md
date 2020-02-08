@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Added a `Row` class to represent database query result rows. This is a subclass of `dict` that also includes lookup by index.
+
 ## [0.0.3] - 2019-01-19
 
 ### Fixed
