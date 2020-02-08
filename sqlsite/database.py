@@ -2,6 +2,18 @@ import apsw
 import os
 
 
+class Row(dict):
+    """
+    A dictionary with one extra feature: it supports lookup of values
+    by index. This implementation works because dictionaries in Python
+    3.7+ are guaranteed to return their values in insertion order.
+    """
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return list(self.values())[key]
+        return super().__getitem__(key)
+
+
 def get_readonly_connection(name):
     return apsw.Connection(name, flags=apsw.SQLITE_OPEN_READONLY)
 
@@ -15,11 +27,7 @@ def connect(name=None):
 
 def row_factory(cursor, row):
     columns = [column[0] for column in cursor.getdescription()]
-    result = {}
-    for index, value in enumerate(row):
-        result[columns[index]] = value
-        result[index] = value
-    return result
+    return Row(zip(columns, row))
 
 
 def install_row_factory(db):
