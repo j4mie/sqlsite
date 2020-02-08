@@ -80,10 +80,7 @@ def template(request):
         params = params or {}
         return request.db.cursor().execute(sql, params).fetchall()
 
-    context = {
-        "sql": sql,
-        "url": request.route.url_params,
-    }
+    context = {"sql": sql, "url": request.route.url_params, "query": request.query}
     content = template.render(context)
     return HTMLResponse(content=content)
 
