@@ -99,3 +99,13 @@ def test_content_length_correct_with_non_ascii_characters(db):
     client = httpx.Client(app=app)
     response = client.get("http://test/")
     assert response.headers["Content-Length"] == str(len(response.content))
+
+
+def test_query_string_available_in_template(db):
+    create_route(db, "", "template", config="template.html")
+    create_sqlar_file(db, "template.html", b"<h1>hello {{ query.name[0] }}</h1>")
+    app = make_app(db)
+    client = httpx.Client(app=app)
+    response = client.get("http://test/?name=world")
+    assert response.status_code == 200
+    assert response.text == "<h1>hello world</h1>"
